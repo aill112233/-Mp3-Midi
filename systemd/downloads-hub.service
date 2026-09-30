@@ -1,0 +1,19 @@
+[Unit]
+Description=Downloads Hub Website (Flask)
+After=network-online.target
+Wants=network-online.target
+# 控制服务先启动（管理隧道）
+After=control-server.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+# 部署时把 /path/to/downloads-hub 替换为实际安装路径
+WorkingDirectory=/path/to/downloads-hub
+Environment=PYTHONPATH=/path/to/site-packages
+ExecStart=/bin/bash -c 'cd /path/to/downloads-hub && (setsid nohup python3 app.py > server.log 2>&1 &) && sleep 3'
+ExecStop=/bin/bash -c 'pkill -f "[p]ython3 app.py" || true'
+Restart=no
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,17 @@
+[Unit]
+Description=Downloads Hub Control Server (always-on, port 8001 + tunnels)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# 部署时把 /path/to/downloads-hub 替换为实际安装路径
+WorkingDirectory=/path/to/downloads-hub
+# 如有自定义 Python 环境，替换 python3 为绝对路径并设置 PYTHONPATH
+Environment=PYTHONPATH=/path/to/site-packages
+ExecStart=python3 /path/to/downloads-hub/control_server.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
